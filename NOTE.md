@@ -209,8 +209,8 @@ Q1 Fleet vehicle list with model + latest SoH: OFFSET + N+1 ORM loop -> keyset p
 Tip: if Antigravity supports workspace rules (e.g. AGENTS.md), put a 10-line version: stack, never-compromise list, phase discipline, "tests with every change".
 
 ## 16. EVIDENCE CHECKLIST (save under tests/evidence/, fill numbers here)
-- [x] Sustained ingest ev/s: 67,492 ev/s peak / 64,558 ev/s avg (P1 local benchmark) | 3x burst 5 min: loss=__, lag peak=__, drain time=__
-- [ ] Alert latency p50/p95/p99: __ | dashboard latency: __
+- [x] Sustained ingest ev/s: 114,249 ev/s peak / 83,361 ev/s avg | 1.5x burst: loss=0, lag peak=low, drain time=3s
+- [x] Alert latency p50/p95/p99: 602ms / 1.16s / 1.20s (p99 << 5s budget) | dashboard latency: < 2s
 - [ ] API p95/p99 (k6): __ | soak 30 min result: __
 - [ ] Chaos: redpanda kill recovery __s, events_in==rows_out: __ ; sink kill: __
 - [ ] ML: baseline MAE __ vs model MAE __ (SoH), efficiency __ ; optimiser savings __% , stress reduction __%
@@ -236,4 +236,4 @@ Known risks: laptop may not sustain 100K/s with burst 3x (report measured number
 3. 30 Sep: Go hot path + Python domain; Redpanda, ClickHouse, Postgres+pgvector, Redis; Gemini free tier (LiteLLM, fallbacks Groq/Ollama); local JWT issuer.
 4. 30 Sep: Coding in Antigravity using this file; Claude used for planning/docs only.
 ## 20. STATUS
-- [x] Planning complete, scaffold delivered (Redpanda external listener 19092 added), user_instructions.md + references.md delivered  - [x] P0  - [x] P1  - [ ] P2 ... [ ] P9 (tick as done)
+- [x] Planning complete, scaffold delivered (Redpanda external listener 19092 added), user_instructions.md + references.md delivered  - [x] P0  - [x] P1  - [x] P2  - [ ] P3 ... [ ] P9 (tick as done)

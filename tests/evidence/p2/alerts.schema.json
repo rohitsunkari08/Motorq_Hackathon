@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://evc.internal/schemas/alerts.v1.json",
+  "title": "AlertEvent",
+  "description": "Standardized alert event schema emitted to topic alerts per NOTE.md §6.2",
+  "type": "object",
+  "required": [
+    "alert_id",
+    "vin",
+    "type",
+    "severity",
+    "severity_level",
+    "event_ts",
+    "emit_ts",
+    "latency_ms",
+    "lat",
+    "lon",
+    "detail"
+  ],
+  "properties": {
+    "alert_id": {
+      "type": "string",
+      "description": "Unique identifier for this alert event"
+    },
+    "vin": {
+      "type": "string",
+      "pattern": "^[A-HJ-NPR-Z0-9]{17}$",
+      "minLength": 17,
+      "maxLength": 17,
+      "description": "17-character VIN of vehicle raising alert"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "RANGE_RISK",
+        "LOW_SOC",
+        "THERMAL",
+        "RAPID_DROP",
+        "HARSH_BRAKE"
+      ],
+      "description": "Classification of the triggered rule"
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["CRITICAL", "HIGH", "WARN", "INFO"],
+      "description": "Human-readable severity level"
+    },
+    "severity_level": {
+      "type": "integer",
+      "enum": [1, 2, 3, 4],
+      "description": "Numeric severity ranking matching Postgres alert.severity (1=CRITICAL, 2=HIGH, 3=WARN, 4=INFO)"
+    },
+    "event_ts": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of the triggering canonical telemetry event"
+    },
+    "emit_ts": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when alert was evaluated and produced by alerts engine"
+    },
+    "latency_ms": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Latency in milliseconds between event_ts and emit_ts (Target: p99 < 5000ms)"
+    },
+    "lat": {
+      "type": "number",
+      "minimum": -90.0,
+      "maximum": 90.0,
+      "description": "Vehicle latitude at the time of the event"
+    },
+    "lon": {
+      "type": "number",
+      "minimum": -180.0,
+      "maximum": 180.0,
+      "description": "Vehicle longitude at the time of the event"
+    },
+    "detail": {
+      "type": "object",
+      "description": "Diagnostic and contextual telemetry parameters specific to the alert rule"
+    }
+  },
+  "additionalProperties": false
+}

@@ -2,6 +2,6 @@ Phase 1 Throughput Benchmark Results
 ====================================
 Target Rate: 75,000 ev/s
 Simulated Vehicles: 100,000
-Observed Peak Rate: 74999.0 ev/s
-Observed Average Rate: 74910.3 ev/s
+Observed Peak Rate: 74167.0 ev/s
+Observed Average Rate: 72143.7 ev/s
 Acceptance Standard: >= 50,000 ev/s (PASSED)

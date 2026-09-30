@@ -36,6 +36,9 @@ services:
     image: grafana/grafana:11.2.0
     ports: ["3001:3000"]
     environment: {GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_PASSWORD}"}
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
   ingest-normalize:
     build: ./services/ingest
     command: ["--mode=normalize", "--brokers=redpanda:9092", "--metrics-port=2112"]
@@ -45,6 +48,29 @@ services:
     environment:
       KAFKA_BROKERS: "redpanda:9092"
       METRICS_PORT: "2112"
+  ingest-sink:
+    build: ./services/ingest
+    command: ["--mode=sink", "--brokers=redpanda:9092", "--metrics-port=2114", "--clickhouse-addr=clickhouse:9000", "--redis-addr=redis:6379", "--clickhouse-password=${CH_PASSWORD}"]
+    depends_on:
+      redpanda: {condition: service_healthy}
+    ports: ["2114:2114"]
+    environment:
+      KAFKA_BROKERS: "redpanda:9092"
+      METRICS_PORT: "2114"
+      CLICKHOUSE_ADDR: "clickhouse:9000"
+      CLICKHOUSE_PASSWORD: "${CH_PASSWORD}"
+      REDIS_ADDR: "redis:6379"
+  ingest-alerts:
+    build: ./services/ingest
+    command: ["--mode=alerts", "--brokers=redpanda:9092", "--metrics-port=2115", "--postgres-url=postgres://evc:${PG_PASSWORD}@postgres:5432/evc?sslmode=disable", "--redis-addr=redis:6379"]
+    depends_on:
+      redpanda: {condition: service_healthy}
+    ports: ["2115:2115"]
+    environment:
+      KAFKA_BROKERS: "redpanda:9092"
+      METRICS_PORT: "2115"
+      POSTGRES_URL: "postgres://evc:${PG_PASSWORD}@postgres:5432/evc?sslmode=disable"
+      REDIS_ADDR: "redis:6379"
   simulator:
     build: ./services/simulator
     command: ["--mode=live", "--rate=100000", "--vehicles=100000", "--brokers=redpanda:9092", "--metrics-port=2113"]

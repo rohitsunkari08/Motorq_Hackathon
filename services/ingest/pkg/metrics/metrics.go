@@ -51,4 +51,28 @@ var (
 			Help: "Total number of canonical telemetry rows inserted into storage",
 		},
 	)
+
+	AlertLatency = promauto.NewHistogram(
+		prometheus.HistogramOpts{
+			Name:    "alert_latency_seconds",
+			Help:    "Latency from canonical event occurrence to alert emission",
+			Buckets: []float64{0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.0, 5.0, 10.0},
+		},
+	)
+
+	AlertsEmittedTotal = promauto.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "alerts_emitted_total",
+			Help: "Total number of alerts emitted by type and severity",
+		},
+		[]string{"type", "severity"},
+	)
+
+	SinkErrorsTotal = promauto.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "sink_errors_total",
+			Help: "Total number of errors encountered during sink operations by target",
+		},
+		[]string{"target"},
+	)
 )
