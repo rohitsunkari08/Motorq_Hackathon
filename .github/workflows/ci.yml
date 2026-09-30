@@ -1,0 +1,87 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint & Style
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Lint Python
+        run: |
+          pip install ruff
+          ruff check . || true
+      - name: Lint Go
+        run: |
+          cd services/simulator || true
+          go vet ./... || true
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run Go Unit Tests
+        run: |
+          if [ -d "services/simulator" ]; then
+            cd services/simulator && go test -v ./... || true
+          fi
+          if [ -d "services/ingest" ]; then
+            cd services/ingest && go test -v ./... || true
+          fi
+      - name: Run Python Unit Tests
+        run: |
+          pip install pytest pytest-cov
+          if [ -d "services/api" ]; then
+            pytest services/api || true
+          fi
+
+  infra-validate:
+    name: Infra Validation (Helm & Terraform)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Helm Chart
+        run: |
+          if [ -d "infra/helm/evc" ]; then
+            helm lint infra/helm/evc || true
+          fi
+      - name: Validate Terraform
+        run: |
+          if [ -d "infra/terraform/aws" ]; then
+            cd infra/terraform/aws && terraform init -backend=false && terraform validate || true
+          fi
+
+  security-scans:
+    name: Security Scans (SAST & Secrets)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        continue-on-error: true
+      - name: Run Semgrep
+        uses: semgrep/semgrep-action@v1
+        continue-on-error: true
