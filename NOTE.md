@@ -236,4 +236,4 @@ Known risks: laptop may not sustain 100K/s with burst 3x (report measured number
 3. 30 Sep: Go hot path + Python domain; Redpanda, ClickHouse, Postgres+pgvector, Redis; Gemini free tier (LiteLLM, fallbacks Groq/Ollama); local JWT issuer.
 4. 30 Sep: Coding in Antigravity using this file; Claude used for planning/docs only.
 ## 20. STATUS
-- [x] Planning complete, scaffold delivered (Redpanda external listener 19092 added), user_instructions.md + references.md delivered  - [ ] P0 ... [ ] P9 (tick as done)
+- [x] Planning complete, scaffold delivered (Redpanda external listener 19092 added), user_instructions.md + references.md delivered  - [x] P0  - [ ] P1 ... [ ] P9 (tick as done)
