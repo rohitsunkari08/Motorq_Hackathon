@@ -4,6 +4,8 @@ scrape_configs:
     static_configs: [{targets: ['redpanda:9644']}]
     metrics_path: /public_metrics
   - job_name: ingest
-    static_configs: [{targets: ['host.docker.internal:2112']}]
+    static_configs: [{targets: ['ingest-normalize:2112', 'host.docker.internal:2112']}]
+  - job_name: simulator
+    static_configs: [{targets: ['simulator:2113', 'host.docker.internal:2113']}]
   - job_name: api
-    static_configs: [{targets: ['host.docker.internal:8000']}]
+    static_configs: [{targets: ['api:8000', 'host.docker.internal:8000']}]

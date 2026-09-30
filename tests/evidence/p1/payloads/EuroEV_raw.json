@@ -1,0 +1,53 @@
+{
+  "oem": "EuroEV",
+  "seq": 1,
+  "signals": [
+    {
+      "name": "lat",
+      "unit": "deg",
+      "value": 40.79734801324957
+    },
+    {
+      "name": "lon",
+      "unit": "deg",
+      "value": -73.92882311865786
+    },
+    {
+      "name": "speed",
+      "unit": "km/h",
+      "value": 0
+    },
+    {
+      "name": "soc",
+      "unit": "pct",
+      "value": 56.821120976474525
+    },
+    {
+      "name": "odo",
+      "unit": "km",
+      "value": 28474.1
+    },
+    {
+      "name": "temp",
+      "unit": "c",
+      "value": 27.017953020039176
+    },
+    {
+      "name": "charging",
+      "unit": "",
+      "value": 0
+    },
+    {
+      "name": "charge_kw",
+      "unit": "kw",
+      "value": 0
+    },
+    {
+      "name": "evt",
+      "unit": "",
+      "value": "NONE"
+    }
+  ],
+  "timestamp": 1790762400,
+  "vin": "1EEEV01A600000004"
+}

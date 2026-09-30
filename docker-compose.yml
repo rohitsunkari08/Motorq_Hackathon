@@ -36,4 +36,23 @@ services:
     image: grafana/grafana:11.2.0
     ports: ["3001:3000"]
     environment: {GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_PASSWORD}"}
+  ingest-normalize:
+    build: ./services/ingest
+    command: ["--mode=normalize", "--brokers=redpanda:9092", "--metrics-port=2112"]
+    depends_on:
+      redpanda: {condition: service_healthy}
+    ports: ["2112:2112"]
+    environment:
+      KAFKA_BROKERS: "redpanda:9092"
+      METRICS_PORT: "2112"
+  simulator:
+    build: ./services/simulator
+    command: ["--mode=live", "--rate=100000", "--vehicles=100000", "--brokers=redpanda:9092", "--metrics-port=2113"]
+    depends_on:
+      redpanda: {condition: service_healthy}
+    ports: ["2113:2113"]
+    profiles: ["sim"]
+    environment:
+      KAFKA_BROKERS: "redpanda:9092"
+      METRICS_PORT: "2113"
 volumes: {redpanda: {}, clickhouse: {}, pg: {}}

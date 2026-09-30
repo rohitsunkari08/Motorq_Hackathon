@@ -1,0 +1,18 @@
+{
+  "schema_v": 1,
+  "vin": "1NMEV01A700000002",
+  "seq": 1,
+  "oem": "NordMotors",
+  "lat": 34.092473173576614,
+  "lon": -118.19681878390405,
+  "geohash7": "9q5cyq7",
+  "speed_kmh": 0,
+  "soc_pct": 92.4,
+  "odo_km": 37202.24,
+  "batt_temp_c": 29.78,
+  "charging": 0,
+  "charge_kw": 0,
+  "dtc": [],
+  "evt": "NONE",
+  "ts": "2026-09-30T10:00:00Z"
+}
