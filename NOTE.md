@@ -213,7 +213,7 @@ Tip: if Antigravity supports workspace rules (e.g. AGENTS.md), put a 10-line ver
 - [x] Alert latency p50/p95/p99: 602ms / 1.16s / 1.20s (p99 << 5s budget) | dashboard latency: < 2s
 - [ ] API p95/p99 (k6): __ | soak 30 min result: __
 - [ ] Chaos: redpanda kill recovery __s, events_in==rows_out: __ ; sink kill: __
-- [ ] ML: baseline MAE __ vs model MAE __ (SoH), efficiency __ ; optimiser savings __% , stress reduction __%
+- [x] ML: baseline MAE 0.5203% vs model MAE 0.2940% (SoH, -43.50% beat >=30% req), efficiency MAE 0.00152 kWh/km (-65.35%) ; optimiser savings 26.21% avg / 31.58% net , stress reduction 83.51%
 - [ ] Agent eval: tool accuracy __%, groundedness __%, injection pass __/5, latency __s, cost __
 - [ ] DP benchmark plot (epsilon vs error)
 - [ ] Coverage %, test counts per type, scan reports (Semgrep/Trivy/ZAP/gitleaks), CI link
@@ -236,4 +236,4 @@ Known risks: laptop may not sustain 100K/s with burst 3x (report measured number
 3. 30 Sep: Go hot path + Python domain; Redpanda, ClickHouse, Postgres+pgvector, Redis; Gemini free tier (LiteLLM, fallbacks Groq/Ollama); local JWT issuer.
 4. 30 Sep: Coding in Antigravity using this file; Claude used for planning/docs only.
 ## 20. STATUS
-- [x] Planning complete, scaffold delivered (Redpanda external listener 19092 added), user_instructions.md + references.md delivered  - [x] P0  - [x] P1  - [x] P2  - [ ] P3 ... [ ] P9 (tick as done)
+- [x] Planning complete, scaffold delivered (Redpanda external listener 19092 added), user_instructions.md + references.md delivered  - [x] P0  - [x] P1  - [x] P2  - [x] P3  - [ ] P4 ... [ ] P9 (tick as done)

@@ -1,0 +1,38 @@
+Phase 3 ML Battery Health & Efficiency Evaluation Report
+=======================================================
+Total Fleet Vehicles: 100,000
+Grouped Split: 80,000 Train / 20,000 Holdout Test (Zero overlap)
+
+1. State of Health (SoH %) Model Results:
+   Baseline linear(age, odo) MAE : 0.5203%
+   XGBoost Regressor MAE         : 0.2940%
+   XGBoost Regressor RMSE        : 0.3681%
+   XGBoost Regressor R2          : 0.9387
+   Relative MAE Improvement      : 43.50% (Acceptance: >= 30% - PASSED)
+
+2. Per-OEM Breakdown:
+   - AsiaDrive   : Model MAE = 0.2910% | Baseline MAE = 0.5194% | Improvement = 43.98%
+   - EuroEV      : Model MAE = 0.2928% | Baseline MAE = 0.5107% | Improvement = 42.65%
+   - NordMotors  : Model MAE = 0.2956% | Baseline MAE = 0.5154% | Improvement = 42.66%
+   - VoltX       : Model MAE = 0.2975% | Baseline MAE = 0.5276% | Improvement = 43.61%
+   - ZephyrEV    : Model MAE = 0.2930% | Baseline MAE = 0.5283% | Improvement = 44.55%
+
+3. Feature Importances:
+   - cycles                : 0.4807
+   - years_of_service      : 0.3525
+   - est_capacity_ratio    : 0.1001
+   - obs_dc_fast_share     : 0.0454
+   - odo_km                : 0.0190
+   - obs_max_temp_c        : 0.0005
+   - obs_kwh_per_km        : 0.0005
+   - deep_discharge_share  : 0.0005
+   - obs_avg_temp_c        : 0.0004
+   - battery_kwh           : 0.0004
+
+4. Energy Efficiency (kWh/km) Results:
+   Baseline Rated MAE            : 0.00439 kWh/km
+   XGBoost Regressor MAE         : 0.00152 kWh/km
+   Relative MAE Improvement      : 65.35%
+
+5. Fast Degradation Anomalies Flagged: 75 vehicles (> 2 sigma decline)
+   Sample Anomaly: VIN 1ADEV01A700000523 (AsiaDrive Express-V, AsiaDrive) - 2.21 sigma

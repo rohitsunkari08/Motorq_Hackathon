@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"os/exec"
 	"os/signal"
 	"strings"
 	"sync/atomic"
@@ -78,7 +79,15 @@ func main() {
 	case "live":
 		runLiveSimulation(ctx, brokerList, *numVehicles, *rate, *burstMultiplier, *burstDuration, *seed)
 	case "seed":
-		log.Info().Int("vehicles", *numVehicles).Msg("Seed mode requested (scheduled for P3 database hydration)")
+		log.Info().Int("vehicles", *numVehicles).Msg("Starting high-performance fleet dataset hydration...")
+		cmd := exec.CommandContext(ctx, "python", "services/simulator/seed_dataset.py")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		if err := cmd.Run(); err != nil {
+			log.Error().Err(err).Msg("Seed script execution error")
+		} else {
+			log.Info().Msg("Fleet database seed completed successfully")
+		}
 	default:
 		log.Fatal().Str("mode", *mode).Msg("Invalid mode: must be live or seed")
 	}
