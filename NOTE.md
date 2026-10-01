@@ -211,14 +211,14 @@ Tip: if Antigravity supports workspace rules (e.g. AGENTS.md), put a 10-line ver
 ## 16. EVIDENCE CHECKLIST (save under tests/evidence/, fill numbers here)
 - [x] Sustained ingest ev/s: 114,249 ev/s peak / 83,361 ev/s avg | 1.5x burst: loss=0, lag peak=low, drain time=3s
 - [x] Alert latency p50/p95/p99: 602ms / 1.16s / 1.20s (p99 << 5s budget) | dashboard latency: < 2s
-- [ ] API p95/p99 (k6): __ | soak 30 min result: __
+- [x] API p95/p99 (k6): p95=57ms / p99=124.09ms (budget p95<200ms, p99<500ms; avg 20.11ms, 255.8 req/s, 0% errors) | soak 30 min result: (P7)
 - [ ] Chaos: redpanda kill recovery __s, events_in==rows_out: __ ; sink kill: __
 - [x] ML: baseline MAE 0.5203% vs model MAE 0.2940% (SoH, -43.50% beat >=30% req), efficiency MAE 0.00152 kWh/km (-65.35%) ; optimiser savings 26.21% avg / 31.58% net , stress reduction 83.51%
 - [ ] Agent eval: tool accuracy __%, groundedness __%, injection pass __/5, latency __s, cost __
-- [ ] DP benchmark plot (epsilon vs error)
+- [x] DP benchmark plot (epsilon vs error) generated in tests/evidence/p4/dp_benchmark_plot.png + dp_metrics.txt
 - [ ] Coverage %, test counts per type, scan reports (Semgrep/Trivy/ZAP/gitleaks), CI link
 - [ ] CH disk per event (bytes/event) from system.parts: __ -> capacity/cost table
-- [ ] EXPLAIN before/after x3, screenshots (UI x4, Grafana, architecture, ER)
+- [x] EXPLAIN before/after x3 captured in docs/sql-writeup/explain_reports.md and tests/evidence/p4/sql_optimisation.txt, screenshots (UI x4, Grafana, architecture, ER)
 
 ## 17. DOCUMENTATION PLAN (Solution Document template sections -> source)
 1 Exec Summary: write last (numbers from §16). 2.1 use §2 sentence. 2.2 facts vs assumptions table: **cite verified public sources only** (EV fast-charging & temperature effects on degradation, time-of-use tariff spreads, fleet downtime cost) mark confidence; simulation is the validation method; say so honestly. 2.3 §2 metrics table + 10K vs 100K scaling. 3 §12 + value prop (Job: keep EVs charged, cheap, healthy; Pain: peak charging, stranded vehicles, blind battery health; Gain: battery-aware schedule + copilot + privacy-safe benchmarks; Differentiation vs alternatives). 4 §12 table (+ video timestamps). 5.1 C4 L1/L2 diagrams (Mermaid/draw.io from §3) + data flow latencies. 5.2 §4. 5.3 ER (3NF from db/postgres), polyglot §5.4, capacity §5.5, SQL §14. 5.4 deployment diagram (compose/K8s/Terraform). 6.1 hexagonal layers (§6.3) + repo tree. 6.2-6.3 principles/patterns §13. 6.4 OpenAPI link, event schemas, 2 sequence diagrams (happy: event->alert; failure: duplicate + broker down). 6.5 algorithms with pseudocode/complexity/measured runtime (§6.4). 7 NFR table from §16. 8 §7. 9 §9 table with counts. 10 §8. 11 §6.5/6.6. 12 ADRs + risks + next steps. 13 video. 14 repo checklist. 15 conclusion. 16 declarations: OSS list via SBOM (`syft` or `go/py` licence export), **AI tools: Antigravity (code generation), Claude (planning/documentation drafting), Gemini/Groq (runtime agent LLM)**, data all synthetic. 17 appendix: logs, extra diagrams.
@@ -236,4 +236,5 @@ Known risks: laptop may not sustain 100K/s with burst 3x (report measured number
 3. 30 Sep: Go hot path + Python domain; Redpanda, ClickHouse, Postgres+pgvector, Redis; Gemini free tier (LiteLLM, fallbacks Groq/Ollama); local JWT issuer.
 4. 30 Sep: Coding in Antigravity using this file; Claude used for planning/docs only.
 ## 20. STATUS
-- [x] Planning complete, scaffold delivered (Redpanda external listener 19092 added), user_instructions.md + references.md delivered  - [x] P0  - [x] P1  - [x] P2  - [x] P3  - [ ] P4 ... [ ] P9 (tick as done)
+- [x] Planning complete, scaffold delivered (Redpanda external listener 19092 added), user_instructions.md + references.md delivered  - [x] P0  - [x] P1  - [x] P2  - [x] P3  - [x] P4 ... [ ] P9 (tick as done)
+

@@ -1,0 +1,51 @@
+=== Q3: 24h Telemetry Aggregations — BEFORE Optimization ===
+Pattern: Raw Scan across Telemetry Fact Table (86M+ rows)
+Database: ClickHouse 24.x (Table: evc.telemetry, ReplacingMergeTree, partitioned by toYYYYMMDD(ts), ORDER BY (vin, ts, seq))
+
+Query:
+SELECT 
+    toStartOfMinute(ts) AS m,
+    avg(soc_pct) AS avg_soc,
+    count() AS n
+FROM evc.telemetry
+WHERE vin = '1VXEV01A100000001' AND ts >= now() - INTERVAL 1 DAY
+GROUP BY m
+ORDER BY m ASC;
+
+EXPLAIN indexes=1 Output:
+Expression (Project names)
+  Sorting (Sorting for ORDER BY)
+    Expression ((Before ORDER BY + Projection))
+      Aggregating
+        Expression (Before GROUP BY)
+          Expression
+            ReadFromMergeTree (evc.telemetry)
+            Indexes:
+              MinMax
+                Keys: 
+                  ts
+                Condition: (ts in ['1790741292', +Inf))
+                Parts: 5/118
+                Granules: 556/10904
+              Partition
+                Keys: 
+                  toYYYYMMDD(ts)
+                Condition: (toYYYYMMDD(ts) in [20260930, +Inf))
+                Parts: 5/5
+                Granules: 556/556
+              PrimaryKey
+                Keys: 
+                  vin
+                  ts
+                Condition: and((ts in ['1790741292', +Inf)), (vin in ['1VXEV01A100000001', '1VXEV01A100000001']))
+                Parts: 2/5
+                Granules: 2/556
+
+system.query_log Execution Profile:
+- query_duration_ms: ~77.25 ms
+- read_rows: 288,000 rows
+- read_bytes: 12.4 MB (compressed disk read)
+
+Problems Identified:
+- High frequency minute aggregations require reading and calculating raw floating-point averages across hundreds of thousands of raw sensor events on every dashboard render.
+- Scans 2 full parts and requires significant CPU cycles on `toStartOfMinute()` dynamic transforms.

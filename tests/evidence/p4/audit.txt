@@ -1,0 +1,15 @@
+=== Immutable Audit Log Sample (NOTE.md §6.3 / §8) ===
+Query: SELECT actor, actor_type, action, resource, ts FROM audit_log ORDER BY ts DESC LIMIT 10;
+
+Actor                          | Type   | Action                 | Resource                  | Timestamp (UTC)
+--------------------------------------------------------------------------------------------------------------
+copilot_agent@voltfleet.com    | agent  | propose_charge_plan    | vin:1VXEV01A100000001     | 2026-10-01 04:04:54.602620+00:00
+copilot_agent@voltfleet.com    | agent  | explain_alert          | alert:4901                | 2026-10-01 04:04:24.602620+00:00
+admin@voltfleet.com            | user   | privacy_erasure        | vin:1VXEV01A100000001     | 2026-10-01 04:02:36.003367+00:00
+admin@voltfleet.com            | user   | login_success          | user:1                    | 2026-10-01 04:02:33.571547+00:00
+manager@metrohaul.com          | user   | list_fleet_vehicles    | fleet:2                   | 2026-10-01 03:59:43.660926+00:00
+manager@voltfleet.com          | user   | approve_charge_plan    | plan:1                    | 2026-10-01 03:59:43.625615+00:00
+manager@metrohaul.com          | user   | login_success          | user:5                    | 2026-10-01 03:59:43.583666+00:00
+viewer@voltfleet.com           | user   | login_success          | user:3                    | 2026-10-01 03:59:43.448548+00:00
+manager@voltfleet.com          | user   | login_success          | user:2                    | 2026-10-01 03:59:43.311271+00:00
+admin@voltfleet.com            | user   | login_success          | user:1                    | 2026-10-01 03:59:43.168621+00:00

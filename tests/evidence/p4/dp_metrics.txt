@@ -1,0 +1,39 @@
+=== Differential Privacy Cross-Fleet SoH Benchmark Report (NOTE.md §3.3, §7, §8) ===
+Mechanism: Laplace Noise Addition on Bounded Mean SoH
+Sensitivity: Delta_f = 100 / n
+Noise Distribution: Laplace(0, (100 / n) / eps)
+Target Epsilon: eps = 1.0 (production default)
+K-Anonymity Floor: k >= 20
+
+1. K-Anonymity Small-Group Suppression Verification:
+   - Query Group Size n = 12 (< 20):
+     * Suppressed: True
+     * Returned Value: None
+     * Suppression Reason: Sample size n=12 is below k-anonymity floor (k=20)
+   - Query Group Size n = 19 (< 20):
+     * Suppressed: True
+     * Returned Value: None
+     * Suppression Reason: Sample size n=19 is below k-anonymity floor (k=20)
+   - Query Group Size n = 20 (>= 20 Floor Met):
+     * Suppressed: False
+     * Returned DP Mean SoH: 91.91%
+     * Noise Injected: True
+
+2. Privacy vs Utility Parameter Sweep (Empirical Error vs Epsilon):
+   - n = 25:
+     * eps = 0.5: MAE = 5.328% (Theoretical scale = 8.000%)
+     * eps = 1.0: MAE = 3.143% (Theoretical scale = 4.000%)
+     * eps = 2.0: MAE = 1.896% (Theoretical scale = 2.000%)
+   - n = 100:
+     * eps = 0.5: MAE = 1.985% (Theoretical scale = 2.000%)
+     * eps = 1.0: MAE = 0.923% (Theoretical scale = 1.000%)
+     * eps = 2.0: MAE = 0.479% (Theoretical scale = 0.500%)
+   - n = 500:
+     * eps = 1.0: MAE = 0.197% (Theoretical scale = 0.200%)
+   - n = 2000:
+     * eps = 1.0: MAE = 0.049% (Theoretical scale = 0.050%)
+
+Conclusions & Governance:
+- For sample sizes n >= 100 at production eps = 1.0, the noise distortion is under 1.0% SoH, preserving high utility for fleet benchmarking.
+- Individual vehicle battery profiles are mathematically protected against reconstruction and membership inference attacks.
+- Strict suppression prevents targeted re-identification on small sub-fleets.

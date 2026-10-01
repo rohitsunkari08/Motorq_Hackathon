@@ -1,6 +1,9 @@
 # Environment & secrets
 .env
 *.local
+*.key
+*.pub
+services/api/certs/
 
 # Python
 __pycache__/
@@ -48,3 +51,7 @@ dist/
 Thumbs.db
 desktop.ini
 Desktop.ini
+
+# Testing & Scratch
+.schemathesis/
+scratch/
