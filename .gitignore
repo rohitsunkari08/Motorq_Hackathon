@@ -59,6 +59,7 @@ scratch/
 f1/
 tests/evidence/
 NOTE.md
+docs/
 
 # Terraform
 .terraform/
