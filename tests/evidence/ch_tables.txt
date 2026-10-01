@@ -1,5 +1,0 @@
-charge_session
-telemetry
-telemetry_1m
-telemetry_1m_mv
-vehicle_daily

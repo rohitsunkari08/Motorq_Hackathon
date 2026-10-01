@@ -54,7 +54,11 @@ Desktop.ini
 
 # Testing & Scratch
 .schemathesis/
+.hypothesis/
 scratch/
+f1/
+tests/evidence/
+NOTE.md
 
 # Terraform
 .terraform/
