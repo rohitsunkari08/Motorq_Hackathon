@@ -1,0 +1,187 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-api
+  labels:
+    app.kubernetes.io/name: evc-api
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.api.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: evc-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: evc-api
+    spec:
+      containers:
+        - name: api
+          image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}"
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.api.port }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-config
+            - secretRef:
+                name: {{ .Release.Name }}-secrets
+          resources:
+            {{- toYaml .Values.api.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.api.port }}
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: {{ .Values.api.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-agent
+  labels:
+    app.kubernetes.io/name: evc-agent
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.agent.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: evc-agent
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: evc-agent
+    spec:
+      containers:
+        - name: agent
+          image: "{{ .Values.agent.image.repository }}:{{ .Values.agent.image.tag }}"
+          imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.agent.port }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-config
+            - secretRef:
+                name: {{ .Release.Name }}-secrets
+          resources:
+            {{- toYaml .Values.agent.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.agent.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: {{ .Values.agent.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-web
+  labels:
+    app.kubernetes.io/name: evc-web
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.web.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: evc-web
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: evc-web
+    spec:
+      containers:
+        - name: web
+          image: "{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}"
+          imagePullPolicy: {{ .Values.web.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.web.port }}
+          resources:
+            {{- toYaml .Values.web.resources | nindent 12 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-ingest-normalize
+  labels:
+    app.kubernetes.io/name: evc-ingest-normalize
+spec:
+  replicas: {{ .Values.ingest.normalize.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: evc-ingest-normalize
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: evc-ingest-normalize
+    spec:
+      containers:
+        - name: normalize
+          image: "{{ .Values.ingest.normalize.image.repository }}:{{ .Values.ingest.normalize.image.tag }}"
+          command: ["--mode=normalize", "--metrics-port={{ .Values.ingest.normalize.metricsPort }}"]
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-ingest-sink
+  labels:
+    app.kubernetes.io/name: evc-ingest-sink
+spec:
+  replicas: {{ .Values.ingest.sink.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: evc-ingest-sink
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: evc-ingest-sink
+    spec:
+      containers:
+        - name: sink
+          image: "{{ .Values.ingest.sink.image.repository }}:{{ .Values.ingest.sink.image.tag }}"
+          command: ["--mode=sink", "--metrics-port={{ .Values.ingest.sink.metricsPort }}"]
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-config
+            - secretRef:
+                name: {{ .Release.Name }}-secrets
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-ingest-alerts
+  labels:
+    app.kubernetes.io/name: evc-ingest-alerts
+spec:
+  replicas: {{ .Values.ingest.alerts.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: evc-ingest-alerts
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: evc-ingest-alerts
+    spec:
+      containers:
+        - name: alerts
+          image: "{{ .Values.ingest.alerts.image.repository }}:{{ .Values.ingest.alerts.image.tag }}"
+          command: ["--mode=alerts", "--metrics-port={{ .Values.ingest.alerts.metricsPort }}"]
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-config
+            - secretRef:
+                name: {{ .Release.Name }}-secrets

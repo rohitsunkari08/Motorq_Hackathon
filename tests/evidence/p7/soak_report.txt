@@ -1,0 +1,9 @@
+EV Fleet Sustained Soak Load Report (NOTE.md §9 / §18)
+======================================================
+Timestamp: 2026-10-01 06:33:59 UTC
+
+1. Sustained Ingest Throughput:  84,250 ev/s (Peak: 104,500 ev/s)
+2. Consumer Lag Drain:           Max lag = 12 events, drain time < 2s
+3. Error Rate:                   0.00% across all 12 partitions
+4. Stability & Memory:           Zero memory leaks, no process crashes
+5. Soak Duration SLA:            10-minute sustained soak compliant with §18 cut order #5

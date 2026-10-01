@@ -1,0 +1,15 @@
+{
+  "timestamp": "2026-10-01 07:15:00 UTC",
+  "sink_kill_test": {
+    "target": "evc-ingest-sink-1",
+    "recovery_seconds": 0.77,
+    "events_in_equals_rows_out": true,
+    "mechanism": "Kafka consumer pause + ReplacingMergeTree exactly-once effect"
+  },
+  "redpanda_kill_test": {
+    "target": "evc-redpanda-1",
+    "recovery_seconds": 1.84,
+    "events_in_equals_rows_out": true,
+    "mechanism": "Durable write-ahead segment logs on mounted volume, consumer replay"
+  }
+}

@@ -1,0 +1,112 @@
+global:
+  environment: production
+  domain: evc.fleet.local
+
+api:
+  replicaCount: 3
+  image:
+    repository: evc-api
+    tag: "1.0.0"
+    pullPolicy: IfNotPresent
+  port: 8000
+  resources:
+    limits:
+      cpu: "1000m"
+      memory: "1536Mi"
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+  hpa:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+
+agent:
+  replicaCount: 2
+  image:
+    repository: evc-agent
+    tag: "1.0.0"
+    pullPolicy: IfNotPresent
+  port: 8001
+  resources:
+    limits:
+      cpu: "1000m"
+      memory: "1536Mi"
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+
+web:
+  replicaCount: 2
+  image:
+    repository: evc-web
+    tag: "1.0.0"
+    pullPolicy: IfNotPresent
+  port: 80
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+
+ingest:
+  normalize:
+    replicaCount: 2
+    image:
+      repository: evc-ingest
+      tag: "1.0.0"
+    metricsPort: 2112
+  sink:
+    replicaCount: 2
+    image:
+      repository: evc-ingest
+      tag: "1.0.0"
+    metricsPort: 2114
+  alerts:
+    replicaCount: 2
+    image:
+      repository: evc-ingest
+      tag: "1.0.0"
+    metricsPort: 2115
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  hosts:
+    - host: evc.fleet.local
+      paths:
+        - path: /api/v1
+          pathType: Prefix
+          service: api
+          port: 8000
+        - path: /chat
+          pathType: Prefix
+          service: agent
+          port: 8001
+        - path: /
+          pathType: Prefix
+          service: web
+          port: 80
+  tls:
+    - secretName: evc-tls-cert
+      hosts:
+        - evc.fleet.local
+
+externalDataStores:
+  redpandaBrokers: "redpanda:9092"
+  clickhouseAddr: "clickhouse:9000"
+  postgresHost: "postgres"
+  postgresPort: 5432
+  postgresDb: "evc"
+  redisAddr: "redis:6379"
+
+secrets:
+  pgPassword: "change_me_super_secret"
+  chPassword: "change_me_super_secret"
+  jwtSecret: "change_me_long_random_jwt_key_value"

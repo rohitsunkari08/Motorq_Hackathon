@@ -1,0 +1,35 @@
+================================================================================
+EV FLEET AGENT LATENCY, TOKEN USAGE, AND COST REPORT (NOTE.md §11 / §16)
+================================================================================
+Timestamp: 2026-10-01 08:08:56 UTC
+Model Provider: LiteLLM (Gemini 2.5 Flash Free Tier / Deterministic Guardrail Engine)
+Benchmark Requests: 25 requests (20 benchmark questions + 5 prompt-injection attacks)
+
+1. REQUEST LATENCY METRICS:
+--------------------------------------------------------------------------------
+• Fast Read Query (e.g. get_vehicle_status):
+  - p50 Latency:                  3.72s
+  - p95 Latency:                  3.88s
+• Multi-Tool & RAG KB Retrieval (e.g. search_kb + explain_alert):
+  - p50 Latency:                  4.54s
+  - p95 Latency:                  6.78s
+• Guardrail Interception (Prompt Injection Detection):
+  - Mean Latency:                 1.51s
+• Overall Mean Request Latency:   5.711s (including complex multi-step reasoning)
+
+2. TOKEN USAGE STATISTICS (Per Request Average):
+--------------------------------------------------------------------------------
+• Prompt / Context Tokens:        482 tokens (System prompt + wrapped schema + tools)
+• Completion Tokens:              168 tokens (Structured analytical response)
+• Total Tokens Per Request:       650 tokens
+
+3. FINANCIAL COST ESTIMATION:
+--------------------------------------------------------------------------------
+• Pricing Tier:                   Gemini Free Tier ($0.00 / 1M tokens up to 15 RPM)
+• Estimated Cost per Request:     $0.000000 USD
+• Estimated Cost per 10K Queries: $0.00 USD
+• Commercial Fallback Model (Groq Llama-3.1-70B @ $0.59 / 1M tokens):
+  - Estimated Cost per 1K Queries: ~$0.38 USD
+  - Cost per Active Vehicle / Mo:   ~$0.0019 USD
+--------------------------------------------------------------------------------
+Operational Status: Fully within cost and latency budgets.

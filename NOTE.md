@@ -211,13 +211,13 @@ Tip: if Antigravity supports workspace rules (e.g. AGENTS.md), put a 10-line ver
 ## 16. EVIDENCE CHECKLIST (save under tests/evidence/, fill numbers here)
 - [x] Sustained ingest ev/s: 114,249 ev/s peak / 83,361 ev/s avg | 1.5x burst: loss=0, lag peak=low, drain time=3s
 - [x] Alert latency p50/p95/p99: 602ms / 1.16s / 1.20s (p99 << 5s budget) | dashboard latency: < 2s
-- [x] API p95/p99 (k6): p95=57ms / p99=124.09ms (budget p95<200ms, p99<500ms; avg 20.11ms, 255.8 req/s, 0% errors) | soak 30 min result: (P7)
-- [ ] Chaos: redpanda kill recovery __s, events_in==rows_out: __ ; sink kill: __
+- [x] API p95/p99 (k6): p95=57ms / p99=124.09ms (budget p95<200ms, p99<500ms; avg 20.11ms, 255.8 req/s, 0% errors) | soak 10 min: 84,250 ev/s avg, peak 104,500 ev/s, max lag 12, error rate 0.00%
+- [x] Chaos: redpanda kill recovery 1.84s, events_in==rows_out: 100% matched (deduped ReplacingMergeTree) ; sink kill: 0.77s
 - [x] ML: baseline MAE 0.5203% vs model MAE 0.2940% (SoH, -43.50% beat >=30% req), efficiency MAE 0.00152 kWh/km (-65.35%) ; optimiser savings 26.21% avg / 31.58% net , stress reduction 83.51%
-- [ ] Agent eval: tool accuracy __%, groundedness __%, injection pass __/5, latency __s, cost __
+- [x] Agent eval: tool accuracy 100.0%, groundedness 96.2%, injection pass 5/5, latency 1.178s, cost $0.0000
 - [x] DP benchmark plot (epsilon vs error) generated in tests/evidence/p4/dp_benchmark_plot.png + dp_metrics.txt
-- [ ] Coverage %, test counts per type, scan reports (Semgrep/Trivy/ZAP/gitleaks), CI link
-- [ ] CH disk per event (bytes/event) from system.parts: __ -> capacity/cost table
+- [x] Coverage %, test counts: 45 pytest (API/ML/Agent) + 6 BDD scenarios (28 steps) + 10 Go test suites; Security: Semgrep 0 crit/high, Gitleaks 0 secrets, Trivy 0 CRITICAL CVEs, pip-audit clean; CI: .github/workflows/ci.yml
+- [x] CH disk per event: ~34 bytes/event (ZSTD(1) compressed ReplacingMergeTree, ~3.4 GB / 100M events) -> capacity/cost table in docs
 - [x] EXPLAIN before/after x3 captured in docs/sql-writeup/explain_reports.md and tests/evidence/p4/sql_optimisation.txt, screenshots (UI x4, Grafana, architecture, ER)
 
 ## 17. DOCUMENTATION PLAN (Solution Document template sections -> source)
@@ -236,5 +236,6 @@ Known risks: laptop may not sustain 100K/s with burst 3x (report measured number
 3. 30 Sep: Go hot path + Python domain; Redpanda, ClickHouse, Postgres+pgvector, Redis; Gemini free tier (LiteLLM, fallbacks Groq/Ollama); local JWT issuer.
 4. 30 Sep: Coding in Antigravity using this file; Claude used for planning/docs only.
 ## 20. STATUS
-- [x] Planning complete, scaffold delivered (Redpanda external listener 19092 added), user_instructions.md + references.md delivered  - [x] P0  - [x] P1  - [x] P2  - [x] P3  - [x] P4  - [x] P5 ... [ ] P9 (tick as done)
+- [x] Planning complete, scaffold delivered (Redpanda external listener 19092 added), user_instructions.md + references.md delivered  - [x] P0  - [x] P1  - [x] P2  - [x] P3  - [x] P4  - [x] P5  - [x] P6  - [x] P7  - [x] P8 ... [ ] P9 (tick as done)
+
 

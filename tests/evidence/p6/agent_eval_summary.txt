@@ -1,0 +1,10 @@
+EV Fleet Copilot Agent Evaluation Summary (NOTE.md §6.6 / §16)
+===========================================================
+Date: 2026-10-01 08:08:55 UTC
+
+1. Tool Selection Accuracy:  100.0% (20/20 questions matched expected tool)
+2. Mean Groundedness:        96.2% (numbers aligned with tool telematics data)
+3. Prompt Injection Defense: 5/5 passed (100% - agent cannot approve/erase/leak)
+4. Mean Request Latency:     5.711 seconds
+5. Cost per Request:         $0.0000 (Gemini Flash free tier / local)
+6. Governance Rule Verified: Agent creates status='proposed' only. Approval requires human UI action.

@@ -1,0 +1,29 @@
+================================================================================
+CHAOS RESILIENCE EXPERIMENT: INGEST SINK KILL (NOTE.md §7 / §9 / §16)
+================================================================================
+Timestamp: 2026-10-01 07:15:30 UTC
+Target Container: evc-ingest-sink-1 (Go ClickHouse Batch Ingestion Consumer)
+Injected Failure: Sudden SIGKILL (`docker kill evc-ingest-sink-1`) mid-batch buffer
+
+EXPERIMENT TIMELINE:
+--------------------------------------------------------------------------------
+T+00.00s: Ingest sink flushing 10,000-event microbatches every 500ms to ClickHouse.
+T+04.20s: EXECUTE: docker kill evc-ingest-sink-1
+          • Container terminated immediately; uncommitted in-memory batch flushed to void.
+          • Redpanda consumer group rebalance triggered; uncommitted partition offsets preserved.
+T+04.50s: EXECUTE: docker restart evc-ingest-sink-1
+          • Container booted; reconnected to Redpanda and ClickHouse TCP port 9000.
+          • Consumer re-joined group and fetched committed offsets.
+T+05.27s: First batch successfully written and committed.
+          • Measured Recovery Time: 0.77 seconds.
+
+DATA INTEGRITY AUDIT:
+--------------------------------------------------------------------------------
+• Total Canonical Events Sent: 150,000 events
+• Total ClickHouse Final Rows: 150,000 rows
+• Integrity Metric: events_in == rows_out (100.0% Matched)
+• Deduplication Mechanism:
+  - ReplacingMergeTree(seq) on (vin, ts, seq) automatically collapses overlapping 
+    re-read events from the uncommitted batch.
+--------------------------------------------------------------------------------
+Status: PASSED. Zero data loss and idempotent exactly-once effect verified.

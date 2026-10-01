@@ -1,0 +1,16 @@
+apiVersion: v2
+name: evc
+description: EV Fleet Charging & Battery-Health Copilot Helm Chart
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+maintainers:
+  - name: Rohit Sunkari
+    email: rohit@motorq-hackathon.local
+keywords:
+  - ev
+  - fleet
+  - charging
+  - battery-health
+  - copilot
+  - kubernetes

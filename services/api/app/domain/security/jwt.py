@@ -100,6 +100,9 @@ class JWTManager:
         token = jwt.encode(payload, self.private_key, algorithm=settings.JWT_ALGORITHM)
         return token
 
+    # Alias for convenience
+    issue_token = create_access_token
+
     def verify_token(self, token: str) -> TokenClaims:
         """Verify RS256 token and return parsed TokenClaims. Raises PyJWTError on failure."""
         payload = jwt.decode(
